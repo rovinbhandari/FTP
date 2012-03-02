@@ -27,14 +27,15 @@ int main(int argc, char* argv[])
 	chp->conid = -1;
 	strcpy(chp->buffer, argv[1]);
 	printpacket(chp, HP);
-	data = htonp(chp);
 	int i;
 	for(i = 0; i < NPACKETS; i++)
 	{
+		chp->status = i;
+		data = htonp(chp);
 		if((x = send(socket_fd, data, size_packet, 0)) != size_packet)
 			er("send()", x);
 		set0(data);
-		printpacket(ntohp(data), HP);
+		sleep(2);
 		if((x = recv(socket_fd, data, size_packet, 0)) <= 0)
 			er("recv()", x);
 		printpacket(ntohp(data), HP);

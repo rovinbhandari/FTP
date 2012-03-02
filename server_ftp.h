@@ -14,5 +14,3 @@
 
 #define	ID	"SERVER=> "
 
-char* timestamp(char*);
-

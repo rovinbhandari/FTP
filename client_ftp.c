@@ -2,9 +2,6 @@
 
 int main(int argc, char* argv[])
 {
-	if(argc != 2)
-		er("incorrect usage", -1);
-		
 	// BEGIN: initialization
 	struct sockaddr_in sin_server;
 	int socket_fd, x;
@@ -13,19 +10,21 @@ int main(int argc, char* argv[])
 	struct packet* chp = (struct packet*) malloc(size_packet);		// client host packet
 	struct packet* data;							// network packet
 	
-	if((x = socket_fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
+	if((x = socket_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 		er("socket()", x);
 	
 	memset((char*) &sin_server, 0, sizeof(struct sockaddr_in));
 	sin_server.sin_family = AF_INET;
+	sin_server.sin_addr.s_addr = inet_addr(IPSERVER);
 	sin_server.sin_port = htons(PORTSERVER);
 	
-	if(!(x = inet_aton(IPSERVER, &sin_server.sin_addr)))
-		er("inet_aton()", x);
+	if((x = connect(socket_fd, (struct sockaddr*) &sin_server, size_sockaddr)) < 0)
+		er("connect()", x);
 			
-	printf(ID "UDP Client started up. Attempting communication with server @ %s:%d...\n\n", IPSERVER, PORTSERVER);
+	printf(ID "FTP Client started up. Attempting communication with server @ %s:%d...\n\n", IPSERVER, PORTSERVER);
 	// END: initialization
 	
+	/*
 	// BEGIN: request
 	set0(chp);
 	chp->type = REQU;
@@ -76,10 +75,27 @@ int main(int argc, char* argv[])
 	printf(ID "KTHXBYE\n");
 	fflush(stdout);
 	// END: done acknowledgement
+	*/
+	
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	strcpy(chp->buffer, argv[1]);
+	printpacket(chp, HP);
+	data = htonp(chp);
+	int i;
+	for(i = 0; i < NPACKETS; i++)
+	{
+		if((x = send(socket_fd, data, size_packet, 0)) != size_packet)
+			er("send()", x);
+		if((x = recv(socket_fd, data, size_packet, 0)) <= 0)
+			er("recv()", x);
+		printpacket(data, NP);
+	}
 	
 	// BEGIN: cleanup
-	free(chp);
-	free(data);
+	//free(chp);
+	//free(data);
 	//free(&sin_server);
 	close(socket_fd);
 	printf(ID "Done.\n");

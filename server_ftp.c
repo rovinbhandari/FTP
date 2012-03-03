@@ -66,9 +66,13 @@ void* serve_client(void* info)
 		}
 		
 		shp = ntohp(data);
+		
 		if(shp->type == TERM)
 			break;
-		else if(shp->type == REQU)
+		
+		shp->conid = connection_id;
+		
+		if(shp->type == REQU)
 		{
 			//send info and then proceed to complete the request
 			shp->type = INFO;

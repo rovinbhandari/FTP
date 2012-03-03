@@ -33,8 +33,7 @@ int main(void)
 	{
 		if((x = sfd_client = accept(sfd_server, (struct sockaddr*) &sin_client, &size_sockaddr)) < 0)
 			er("accept()", x);
-		//port_client = ntohs(sin_client.sin_port);
-		printf(ID "Communication started with %s:%d\n", inet_ntoa(sin_client.sin_addr), /*port_client*/ ntohs(sin_client.sin_port));
+		printf(ID "Communication started with %s:%d\n", inet_ntoa(sin_client.sin_addr), ntohs(sin_client.sin_port));
 		fflush(stdout);
 		
 		struct client_info* ci = client_info_alloc(sfd_client, connection_id++);
@@ -61,7 +60,10 @@ void* serve_client(void* info)
 	while(1)
 	{
 		if((x = recv(sfd_client, data, size_packet, 0)) == 0)
-			er("recv()", x);
+		{
+			fprintf(stderr, "client force-closed or packet dropped by network. closing connection.\n");
+			break;
+		}
 		
 		shp = ntohp(data);
 		if(shp->type == TERM)

@@ -1,6 +1,10 @@
 #include <server_ftp.h>
 
-static void gg()
+struct client_info* client_info_alloc(int s, int c)
 {
-	return;
+	struct client_info* ci = (struct client_info*) malloc(sizeof(struct client_info));
+	ci->sfd = s;
+	ci->cid = c;
+	return ci;
 }
+

@@ -1,18 +1,15 @@
 #include <server_ftp.h>
 
-const size_t size_sockaddr = sizeof(struct sockaddr), size_packet = sizeof(struct packet);
+size_t size_sockaddr = sizeof(struct sockaddr), size_packet = sizeof(struct packet);
+
 void* serve_client(void*);
 
 int main(void)
 {
 	//BEGIN: initialization
 	struct sockaddr_in sin_server, sin_client;
-	int sfd_server, sfd_client, x, connectionid = 0;
-	//unsigned short int port_client;
-	char path[LENBUFFER];
-	short int connection_id = -2;
-	struct packet* shp;							// client host packet
-	struct packet* data = (struct packet*) malloc(size_packet);		// network packet
+	int sfd_server, sfd_client, x;
+	short int connection_id = 0;
 	
 	if((x = sfd_server = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 		er("socket()", x);
@@ -40,11 +37,10 @@ int main(void)
 		printf(ID "Communication started with %s:%d\n", inet_ntoa(sin_client.sin_addr), /*port_client*/ ntohs(sin_client.sin_port));
 		fflush(stdout);
 		
-		struct client_info* ci = client_info_alloc(sfd_client, connectionid++);
+		struct client_info* ci = client_info_alloc(sfd_client, connection_id++);
 		serve_client(ci);
 	}
 	
-	close(sfd_client);
 	close(sfd_server);
 	printf(ID "Done.\n");
 	fflush(stdout);
@@ -54,10 +50,47 @@ int main(void)
 
 void* serve_client(void* info)
 {
-	int x, recvsize;
-	struct packet* data;
-	//assign values from info to local variables
-	if((x = send(sfd_client, data, size_packet, 0)) != recvsize)
-		er("send()", x);
+	int sfd_client, connection_id, x;
+	struct packet* data = (struct packet*) malloc(size_packet);
+	struct packet* shp;
+	char path[LENBUFFER];
+	struct client_info* ci = (struct client_info*) info;
+	sfd_client = ci->sfd;
+	connection_id = ci->cid;
+	
+	while(1)
+	{
+		if((x = recv(sfd_client, data, size_packet, 0)) == 0)
+		{
+			fprintf(stderr, "client force-closed or packet dropped by network. closing connection.\n");
+			break;
+		}
+		
+		shp = ntohp(data);
+		if(shp->type == TERM)
+			break;
+		else if(shp->type == REQU)
+		{
+			//send info and then proceed to complete the request
+			shp->type = INFO;
+			sprintf(shp->buffer, "File found. Processing...");
+			data = htonp(shp);
+			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+				er("send()", x);
+		}
+		else
+		{
+			//show error, send TERM and break
+			fprintf(stderr, "packet incomprihensible. closing connection.");
+			shp->type = TERM;
+			data = htonp(shp);
+			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+				er("send()", x);
+			break;
+		}
+	}
+
+	close(sfd_client);
+	fflush(stdout);
 }
 

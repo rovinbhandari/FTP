@@ -79,14 +79,15 @@
 #define	DEBUG		1
 
 #define	LENBUFFER	506		// so as to make the whole packet well-rounded ( = 512 bytes)
-#define	PORTSERVER	8484
+#define	PORTSERVER	8487
 
 enum TYPE
 	{	REQU,
+		RACK,
 		DONE,
+		DACK,
 		INFO,
-		TERM,
-		DATA
+		TERM
 	};
 
 #define	NP		0

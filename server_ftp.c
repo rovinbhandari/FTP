@@ -61,10 +61,7 @@ void* serve_client(void* info)
 	while(1)
 	{
 		if((x = recv(sfd_client, data, size_packet, 0)) == 0)
-		{
-			fprintf(stderr, "client force-closed or packet dropped by network. closing connection.\n");
-			break;
-		}
+			er("recv()", x);
 		
 		shp = ntohp(data);
 		if(shp->type == TERM)
@@ -76,17 +73,11 @@ void* serve_client(void* info)
 			sprintf(shp->buffer, "File found. Processing...");
 			data = htonp(shp);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-				er("send()", x);
+			er("send()", x);
 		}
 		else
 		{
 			//show error, send TERM and break
-			fprintf(stderr, "packet incomprihensible. closing connection.");
-			shp->type = TERM;
-			data = htonp(shp);
-			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-				er("send()", x);
-			break;
 		}
 	}
 

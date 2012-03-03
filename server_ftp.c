@@ -76,10 +76,13 @@ void* serve_client(void* info)
 		{
 			//send info and then proceed to complete the request
 			shp->type = INFO;
+			strcpy(path, shp->buffer);
 			sprintf(shp->buffer, "File found. Processing...");
 			data = htonp(shp);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-			er("send()", x);
+				er("send()", x);
+			
+			send_file(path);
 		}
 		else
 		{

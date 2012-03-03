@@ -8,3 +8,8 @@ struct client_info* client_info_alloc(int s, int c)
 	return ci;
 }
 
+void send_file(char* path)
+{
+	return;
+}
+

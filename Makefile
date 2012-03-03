@@ -5,8 +5,8 @@ SRCSERVER = .
 BIN = .
 OBJCLIENT = obj
 OBJSERVER = obj
-OBJECTSCLIENT = ${OBJCLIENT}/commons_functions.o ${OBJCLIENT}/client_ftp.o
-OBJECTSSERVER = ${OBJSERVER}/commons_functions.o ${OBJSERVER}/server_ftp_functions.o ${OBJSERVER}/server_ftp.o
+OBJECTSCLIENT = ${OBJCLIENT}/commons.o ${OBJCLIENT}/client_ftp.o
+OBJECTSSERVER = ${OBJSERVER}/commons.o ${OBJSERVER}/server_ftp_functions.o ${OBJSERVER}/server_ftp.o
 EXECUTABLECLIENT = ${BIN}/client_ftp.out
 EXECUTABLESERVER = ${BIN}/server_ftp.out
 

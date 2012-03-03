@@ -81,10 +81,14 @@
 #define	LENBUFFER	506		// so as to make the whole packet well-rounded ( = 512 bytes)
 #define	PORTSERVER	8484
 
-#define	REQU		1
-#define RACK		2
-#define	DONE		3
-#define	DACK		4
+enum TYPE
+	{	REQU,
+		RACK,
+		DONE,
+		DACK,
+		INFO,
+		TERM
+	};
 
 #define	NP		0
 #define	HP		1
@@ -97,6 +101,8 @@
 		exit(-1);				\
 	}						\
 	while(0)
+
+//TODO: Make two kinds of packets: one for INFO, the other for DATA.
 
 struct packet
 {

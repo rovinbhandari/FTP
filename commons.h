@@ -83,11 +83,10 @@
 
 enum TYPE
 	{	REQU,
-		RACK,
 		DONE,
-		DACK,
 		INFO,
-		TERM
+		TERM,
+		DATA
 	};
 
 #define	NP		0

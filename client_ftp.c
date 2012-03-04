@@ -9,6 +9,8 @@ int main(int argc, char* argv[])
 	short int connection_id;
 	struct packet* chp = (struct packet*) malloc(size_packet);		// client host packet
 	struct packet* data;							// network packet
+	char path[LENBUFFER];
+	char filename[LENBUFFER];
 	
 	if((x = sfd_client = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 		er("socket()", x);
@@ -28,6 +30,7 @@ int main(int argc, char* argv[])
 	set0(chp);
 	chp->type = REQU;
 	chp->conid = -1;
+	strcpy(path, argv[1]);
 	strcpy(chp->buffer, argv[1]);
 	printpacket(chp, HP);
 	data = htonp(chp);
@@ -42,7 +45,7 @@ int main(int argc, char* argv[])
 		if(chp->type == INFO)
 			printpacket(chp, HP);
 		else if(chp->type == DATA)
-			receive_file(extract_filename(path), sfd_client, 
+			receive_file(extract_filename(path), sfd_client, chp);
 	}
 	while(chp->type != TERM);
 	

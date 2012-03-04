@@ -88,7 +88,7 @@ void* serve_client(void* info)
 		{
 			//show error, send TERM and break
 			fprintf(stderr, "packet incomprihensible. closing connection.");
-			send_term(sfd_client, shp);
+			send_TERM(sfd_client, shp);
 			break;
 		}
 	}

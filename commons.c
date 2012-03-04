@@ -1,5 +1,7 @@
 #include <commons.h>
 
+static size_t size_packet = sizeof(struct packet);
+
 void set0(struct packet* p)
 {
 	memset(p, 0, sizeof(struct packet));
@@ -7,7 +9,6 @@ void set0(struct packet* p)
 
 struct packet* ntohp(struct packet* np)
 {
-	size_t size_packet = sizeof(struct packet);
 	struct packet* hp = (struct packet*) malloc(size_packet);
 	memset(hp, 0, size_packet);
 	
@@ -21,7 +22,6 @@ struct packet* ntohp(struct packet* np)
 
 struct packet* htonp(struct packet* hp)
 {
-	size_t size_packet = sizeof(struct packet);
 	struct packet* np = (struct packet*) malloc(size_packet);
 	memset(np, 0, size_packet);
 	
@@ -49,5 +49,21 @@ void printpacket(struct packet* p, int ptype)
 	printf("\t\tbuffer = %s\n\n", p->buffer);
 	
 	fflush(stdout);
+}
+
+void send_EOT(int sfd, struct packet* hp)
+{
+	int x;
+	hp->type = EOT;
+	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
+		er("send()", x);
+}
+
+void send_TERM(int sfd, struct packet* hp)
+{
+	int x;
+	hp->type = TERM;
+	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
+		er("send()", x);
 }
 

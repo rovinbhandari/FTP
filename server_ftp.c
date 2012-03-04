@@ -82,16 +82,13 @@ void* serve_client(void* info)
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			
-			send_file(path);
+			send_file(path, sfd_client, shp);
 		}
 		else
 		{
 			//show error, send TERM and break
 			fprintf(stderr, "packet incomprihensible. closing connection.");
-			shp->type = TERM;
-			data = htonp(shp);
-			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-				er("send()", x);
+			send_term(sfd_client, shp);
 			break;
 		}
 	}

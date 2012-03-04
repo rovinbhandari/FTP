@@ -41,6 +41,8 @@ int main(int argc, char* argv[])
 		chp = htonp(data);
 		if(chp->type == INFO)
 			printpacket(chp, HP);
+		else if(chp->type == DATA)
+			receive_file(extract_filename(path), sfd_client, 
 	}
 	while(chp->type != TERM);
 	

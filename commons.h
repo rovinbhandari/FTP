@@ -86,7 +86,8 @@ enum TYPE
 		DONE,
 		INFO,
 		TERM,
-		DATA
+		DATA,
+		EOT
 	};
 
 #define	NP		0
@@ -117,4 +118,7 @@ struct packet* ntohp(struct packet*);
 struct packet* htonp(struct packet*);
 
 void printpacket(struct packet*, int);
+
+void send_EOT(int, struct packet*);
+void send_TERM(int, struct packet*);
 

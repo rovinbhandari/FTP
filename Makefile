@@ -10,7 +10,7 @@ OBJECTSSERVER = ${OBJSERVER}/commons.o ${OBJSERVER}/server_ftp_functions.o ${OBJ
 EXECUTABLECLIENT = ${BIN}/client_ftp.out
 EXECUTABLESERVER = ${BIN}/server_ftp.out
 
-all:	client server
+all:	clean client server
 
 client:	${OBJECTSCLIENT}
 	${CC} ${CFLAGS} $^ -o ${EXECUTABLECLIENT}

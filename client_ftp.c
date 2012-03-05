@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	}
 	while(chp->type != TERM);
 	
-	fprintf(stderr, "TERM received; exiting...");
+	fprintf(stderr, "TERM received; exiting...\n");
 
 	close(sfd_client);
 	printf(ID "Done.\n");

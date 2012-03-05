@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	chp->conid = -1;
 	strcpy(path, argv[1]);
 	strcpy(chp->buffer, argv[1]);
-	printpacket(chp, HP);
+	//printpacket(chp, HP);
 	data = htonp(chp);
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 			er("recv()", x);
 		chp = htonp(data);
 		if(chp->type == INFO)
-			printpacket(chp, HP);
+			printf(ID "Server says: %s\n", chp->buffer);
 		else if(chp->type == DATA)
 		{
 			//printpacket(chp, HP);

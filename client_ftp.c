@@ -46,12 +46,8 @@ int main(int argc, char* argv[])
 			printpacket(chp, HP);
 		else if(chp->type == DATA)
 		{
-			printpacket(chp, HP);
-			receive_file(/*extract_filename(*/path/*)*/, sfd_client, chp);
-		}
-		else if(chp->type == EOT)
-		{
-			printpacket(chp, HP);
+			//printpacket(chp, HP);
+			receive_file(extract_filename(path), sfd_client, chp);
 		}
 	}
 	while(chp->type != TERM);

@@ -83,7 +83,6 @@ void* serve_client(void* info)
 				er("send()", x);
 			
 			send_file(path, sfd_client, shp);
-
 			send_TERM(sfd_client, shp);
 		}
 		else

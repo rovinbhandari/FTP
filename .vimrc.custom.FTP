@@ -1,0 +1,16 @@
+set autoindent
+set nu
+set ts=8
+set noexpandtab
+
+e commons.c
+vs commons.h
+tabnew client_ftp.c
+vs client_ftp.h
+tabnew client_ftp_functions.c
+vs client_ftp.h
+tabnew server_ftp.c
+vs server_ftp.h
+tabnew server_ftp_functions.c
+vs server_ftp.h
+tabnew Makefile

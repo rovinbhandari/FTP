@@ -51,19 +51,3 @@ void printpacket(struct packet* p, int ptype)
 	fflush(stdout);
 }
 
-void send_EOT(int sfd, struct packet* hp)
-{
-	int x;
-	hp->type = EOT;
-	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
-		er("send()", x);
-}
-
-void send_TERM(int sfd, struct packet* hp)
-{
-	int x;
-	hp->type = TERM;
-	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
-		er("send()", x);
-}
-

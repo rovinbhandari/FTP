@@ -1,4 +1,5 @@
 #include <commons.h>
+#include <file_transfer_functions.h>
 
 #include <time.h>
 /*
@@ -21,6 +22,4 @@ struct client_info
 };
 
 struct client_info* client_info_alloc(int, int);
-
-void send_file(char*, int, struct packet*);
 

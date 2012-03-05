@@ -1,3 +1,6 @@
+#ifndef COMMONS_H
+#define COMMONS_H
+
 #include <arpa/inet.h>
 /*
 	for:
@@ -119,6 +122,5 @@ struct packet* htonp(struct packet*);
 
 void printpacket(struct packet*, int);
 
-void send_EOT(int, struct packet*);
-void send_TERM(int, struct packet*);
+#endif
 

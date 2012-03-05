@@ -5,6 +5,8 @@ set noexpandtab
 
 e commons.c
 vs commons.h
+tabnew file_transfer_functions.c
+vs file_transfer_functions.h
 tabnew client_ftp.c
 vs client_ftp.h
 tabnew client_ftp_functions.c

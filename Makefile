@@ -2,13 +2,14 @@ CC = gcc
 CFLAGS = -g -I./
 SRCCLIENT = .
 SRCSERVER = .
-BIN = .
+BINCLIENT = bin/client
+BINSERVER = bin/server
 OBJCLIENT = obj
 OBJSERVER = obj
-OBJECTSCLIENT = ${OBJCLIENT}/commons.o ${OBJCLIENT}/client_ftp_functions.o ${OBJCLIENT}/client_ftp.o
-OBJECTSSERVER = ${OBJSERVER}/commons.o ${OBJSERVER}/server_ftp_functions.o ${OBJSERVER}/server_ftp.o
-EXECUTABLECLIENT = ${BIN}/client_ftp.out
-EXECUTABLESERVER = ${BIN}/server_ftp.out
+OBJECTSCLIENT = ${OBJCLIENT}/commons.o ${OBJCLIENT}/client_ftp_functions.o ${OBJCLIENT}/file_transfer_functions.o ${OBJCLIENT}/client_ftp.o
+OBJECTSSERVER = ${OBJSERVER}/commons.o ${OBJSERVER}/server_ftp_functions.o ${OBJSERVER}/file_transfer_functions.o ${OBJSERVER}/server_ftp.o
+EXECUTABLECLIENT = ${BINCLIENT}/client_ftp.out
+EXECUTABLESERVER = ${BINSERVER}/server_ftp.out
 
 all:	clean client server
 
@@ -27,4 +28,5 @@ ${OBJSERVER}/%.o:	${SRCSERVER}/%.c
 clean:
 	rm -f ${OBJCLIENT}/*.o
 	rm -f ${OBJSERVER}/*.o
-	rm -f ${BIN}/*.out
+	rm -f ${BINCLIENT}/*.out
+	rm -f ${BINSERVER}/*.out

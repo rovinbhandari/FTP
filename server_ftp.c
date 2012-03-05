@@ -61,7 +61,7 @@ void* serve_client(void* info)
 	{
 		if((x = recv(sfd_client, data, size_packet, 0)) == 0)
 		{
-			fprintf(stderr, "client force-closed or packet dropped by network. closing connection.\n");
+			fprintf(stderr, "client closed/terminated. closing connection.\n");
 			break;
 		}
 		
@@ -82,7 +82,7 @@ void* serve_client(void* info)
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			
-			//send_file(path, sfd_client, shp);
+			send_file(path, sfd_client, shp);
 
 			send_TERM(sfd_client, shp);
 		}

@@ -84,3 +84,18 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 	}
 }
 
+void printcommand(struct command* c)
+{
+	if(!DEBUG)
+		return;
+	
+	printf("\t\tPrinting contents of the above command...\n");
+	printf("\t\tid = %d\n", c->id);
+	printf("\t\tnpaths = %d\n", c->npaths);
+	printf("\t\tpaths =\n");
+	int i;
+	for(i = 0; i < c->npaths; i++)
+		printf("\t\t\t%s\n", c->paths[i]);
+	printf("\n");
+}
+

@@ -15,3 +15,5 @@ struct command
 
 struct command* userinputtocommand(char [LENUSERINPUT]);
 
+void printcommand(struct command*);
+

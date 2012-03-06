@@ -26,16 +26,20 @@ int main(int argc, char* argv[])
 	//END: initialization
 
 	
-	//int command = -1;
-	char lpwd[LENBUFFER], pwd[LENBUFFER], path[LENBUFFER];
+	struct command* cmd;
+	char lpwd[LENBUFFER], pwd[LENBUFFER];
 	char userinput[LENUSERINPUT];
-	char* paths[LENBUFFER];
 	while(1)
 	{
 		printf("\t> ");
 		fgets(userinput, LENUSERINPUT, stdin);
 		cmd = userinputtocommand(userinput);
+		if(!cmd)
+			continue;
+		printcommand(cmd);
 		// switch case on command
+		if(cmd->id == EXIT)
+			break;
 	}
 	
 	/*

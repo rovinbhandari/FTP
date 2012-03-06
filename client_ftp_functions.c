@@ -2,7 +2,7 @@
 
 //static size_t size_packet = sizeof(struct packet);
 
-static const char commandlist[15][10] =
+static const char commandlist[NCOMMANDS][10] =
 	{
 		"get",
 		"put",
@@ -33,11 +33,11 @@ static const char commandlist[15][10] =
 				replicated accordingly in the COMMANDS \
 				enum in commons.h
 
-static void append_path(struct command* c, char* s);
+static void append_path(struct command* c, char* s)
 {
 	char** temppaths = (char**) malloc(c->npaths * sizeof(char*));
-	if(npaths < 1)
-		memcpy(temppaths, paths, (c->npaths - 1) * sizeof(char*));
+	if(c->npaths < 1)
+		memcpy(temppaths, c->paths, (c->npaths - 1) * sizeof(char*));
 
 	char* temps = (char*) malloc((strlen(s) + 1) * sizeof(char));
 	strcpy(temps, s);

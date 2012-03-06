@@ -6,5 +6,12 @@
 
 #define LENUSERINPUT	1024
 
-int userinputtocommand(char*, char* [LENBUFFER]);
+struct command
+{
+	int id;
+	int npaths;
+	char** paths;
+};
+
+struct command* userinputtocommand(char*);
 

@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	//END: initialization
 
 	
-	int command = -1;
+	//int command = -1;
 	char lpwd[LENBUFFER], pwd[LENBUFFER], path[LENBUFFER];
 	char userinput[LENUSERINPUT];
 	char* paths[LENBUFFER];
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	{
 		printf("\t> ");
 		fgets(userinput, LENUSERINPUT, stdin);
-		command = userinputtocommand(userinput, paths);
+		cmd = userinputtocommand(userinput);
 		// switch case on command
 	}
 	

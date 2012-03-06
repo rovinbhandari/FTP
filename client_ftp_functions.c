@@ -2,7 +2,7 @@
 
 //static size_t size_packet = sizeof(struct packet);
 
-int userinputtocommand(char* s, char* p[LENBUFFER])
+struct command* userinputtocommand(char* s)
 {
 	// tokenize
 

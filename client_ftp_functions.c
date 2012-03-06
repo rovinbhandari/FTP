@@ -76,6 +76,11 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 		}
 	}
 	if(cmd->id != -1)
-		return cmd;			
+		return cmd;
+	else
+	{
+		fprintf(stderr, "Error parsing command");
+		return NULL;
+	}
 }
 

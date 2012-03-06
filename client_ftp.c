@@ -8,9 +8,8 @@ int main(int argc, char* argv[])
 	size_t size_sockaddr = sizeof(struct sockaddr), size_packet = sizeof(struct packet);
 	short int connection_id;
 	struct packet* chp = (struct packet*) malloc(size_packet);		// client host packet
+	set0(chp);
 	struct packet* data;							// network packet
-	char path[LENBUFFER];
-	char filename[LENBUFFER];
 	
 	if((x = sfd_client = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 		er("socket()", x);
@@ -26,8 +25,20 @@ int main(int argc, char* argv[])
 	printf(ID "FTP Client started up. Attempting communication with server @ %s:%d...\n\n", IPSERVER, PORTSERVER);
 	//END: initialization
 
-
-	set0(chp);
+	
+	int command = -1;
+	char lpwd[LENBUFFER], pwd[LENBUFFER], path[LENBUFFER];
+	char userinput[LENUSERINPUT];
+	char* paths[LENBUFFER];
+	while(1)
+	{
+		printf("\t> ");
+		fgets(userinput, LENUSERINPUT, stdin);
+		command = userinputtocommand(userinput, paths);
+		// switch case on command
+	}
+	
+	/*
 	chp->type = REQU;
 	chp->conid = -1;
 	strcpy(path, argv[1]);
@@ -53,6 +64,7 @@ int main(int argc, char* argv[])
 	while(chp->type != TERM);
 	
 	fprintf(stderr, "TERM received; exiting...\n");
+	*/
 
 	close(sfd_client);
 	printf(ID "Done.\n");

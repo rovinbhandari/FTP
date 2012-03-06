@@ -85,7 +85,8 @@
 #define	PORTSERVER	8487
 
 enum TYPE
-	{	REQU,
+	{
+		REQU,
 		DONE,
 		INFO,
 		TERM,
@@ -121,6 +122,25 @@ struct packet* ntohp(struct packet*);
 struct packet* htonp(struct packet*);
 
 void printpacket(struct packet*, int);
+
+enum COMMAND
+	{
+		GET,
+		PUT,
+		MGET,
+		MPUT,
+		CD,
+		LCD,
+		MGETWILD,
+		MPUTWILD,
+		LS,
+		LLS,
+		RGET,
+		RPUT,
+		PWD,
+		LPWD,
+		EXIT
+	};
 
 #endif
 

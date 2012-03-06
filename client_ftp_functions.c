@@ -79,7 +79,7 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 		return cmd;
 	else
 	{
-		fprintf(stderr, "Error parsing command");
+		fprintf(stderr, "Error parsing command\n");
 		return NULL;
 	}
 }

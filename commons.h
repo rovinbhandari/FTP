@@ -123,6 +123,7 @@ struct packet* htonp(struct packet*);
 
 void printpacket(struct packet*, int);
 
+#define NCOMMANDS 17
 enum COMMAND
 	{
 		GET,
@@ -133,6 +134,8 @@ enum COMMAND
 		LCD,
 		MGETWILD,
 		MPUTWILD,
+		DIR,
+		LDIR,
 		LS,
 		LLS,
 		RGET,
@@ -140,7 +143,9 @@ enum COMMAND
 		PWD,
 		LPWD,
 		EXIT
-	};
+	};			// any change made here should also be \
+				replicated accordingly in the commandlist \
+				2D array in client_ftp_fucntions.c
 
 #endif
 

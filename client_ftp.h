@@ -13,5 +13,5 @@ struct command
 	char** paths;
 };
 
-struct command* userinputtocommand(char*);
+struct command* userinputtocommand(char [LENUSERINPUT]);
 

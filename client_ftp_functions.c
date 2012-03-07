@@ -64,7 +64,8 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 			break;
 		if(cmd->id == -1)
 			for(j = 0; j < NCOMMANDS; j++)
-			{	if(!strcmp(token, commandlist[j]))
+			{	
+				if(!strcmp(token, commandlist[j]))
 				{
 					cmd->id = j;
 					break;

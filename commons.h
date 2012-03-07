@@ -112,7 +112,7 @@ struct packet
 {
 	short int conid;
 	short int type;
-	short int status;
+	short int comid;
 	char buffer[LENBUFFER];
 };
 

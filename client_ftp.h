@@ -8,7 +8,7 @@
 
 struct command
 {
-	int id;
+	short int id;
 	int npaths;
 	char** paths;
 };

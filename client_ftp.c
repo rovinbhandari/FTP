@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	struct command* cmd;
 	char lpwd[LENBUFFER], pwd[LENBUFFER];
 	char userinput[LENUSERINPUT];
-	while(1)
+	client_command_loop: while(1)
 	{
 		printf("\t> ");
 		fgets(userinput, LENUSERINPUT, stdin);
@@ -37,9 +37,54 @@ int main(int argc, char* argv[])
 		if(!cmd)
 			continue;
 		printcommand(cmd);
-		// switch case on command
-		if(cmd->id == EXIT)
-			break;
+		switch(cmd->id)
+		{
+			case GET:
+				
+				break;
+			case PUT:
+				
+				break;
+			case MGET:
+			case MGETWILD:
+				
+				break;
+			case MPUT:
+			case MPUTWILD:
+				
+				break;
+			case CD:
+				
+				break;
+			case LCD:
+				
+				break;
+			case PWD:
+				
+				break;
+			case LPWD:
+				
+				break;
+			case DIR:
+			case LS:
+				
+				break;
+			case LDIR:
+			case LLS:
+				
+				break;
+			case RGET:
+				// for later
+				break;
+			case RPUT:
+				// for later
+				break;
+			case EXIT:
+				break client_command_loop;
+			default:
+				// display error
+				break;
+		}
 	}
 	
 	/*

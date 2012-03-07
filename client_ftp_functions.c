@@ -36,7 +36,7 @@ static const char commandlist[NCOMMANDS][10] =
 static void append_path(struct command* c, char* s)
 {
 	char** temppaths = (char**) malloc(c->npaths * sizeof(char*));
-	if(c->npaths < 1)
+	if(c->npaths > 1)
 		memcpy(temppaths, c->paths, (c->npaths - 1) * sizeof(char*));
 
 	char* temps = (char*) malloc((strlen(s) + 1) * sizeof(char));
@@ -62,14 +62,14 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 		token = strtok_r(s, " \t\n", &savestate);
 		if(token == NULL)
 			break;
-		if(i == 0)
+		if(cmd->id == -1)
 			for(j = 0; j < NCOMMANDS; j++)
 			{	if(!strcmp(token, commandlist[j]))
 				{
 					cmd->id = j;
 					break;
 				}
-			}// ommitting braces for teh "for loop" here is \
+			}// ommitting braces for the "for loop" here is \
 			 disastrous because the else below gets \
 			 associated with the "if inside the for loop". \
 			 #BUGFIX
@@ -83,7 +83,7 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 		return cmd;
 	else
 	{
-		fprintf(stderr, "Error parsing command\n");
+		fprintf(stderr, "\tError parsing command\n");
 		return NULL;
 	}
 }

@@ -59,16 +59,20 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 	int i, j;
 	for(i = 0; ; i++, s = NULL)
 	{
-		token = strtok_r(s, " \t", &savestate);
+		token = strtok_r(s, " \t\n", &savestate);
 		if(token == NULL)
 			break;
 		if(i == 0)
 			for(j = 0; j < NCOMMANDS; j++)
-				if(!strcmp(token, commandlist[j]))
+			{	if(!strcmp(token, commandlist[j]))
 				{
 					cmd->id = j;
 					break;
 				}
+			}// ommitting braces for teh "for loop" here is \
+			 disastrous because the else below gets \
+			 associated with the "if inside the for loop". \
+			 #BUGFIX
 		else
 		{
 			cmd->npaths++;

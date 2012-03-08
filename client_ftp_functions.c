@@ -1,6 +1,6 @@
 #include <client_ftp.h>
 
-//static size_t size_packet = sizeof(struct packet);
+static size_t size_packet = sizeof(struct packet);
 
 static const char commandlist[NCOMMANDS][10] =
 	{
@@ -106,6 +106,7 @@ void printcommand(struct command* c)
 
 void command_pwd(struct packet* chp, struct packet* data, int sfd_client)
 {
+	int x;
 	set0(chp);
 	chp->type = REQU;
 	chp->conid = -1;

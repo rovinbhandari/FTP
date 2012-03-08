@@ -10,3 +10,13 @@ struct client_info* client_info_alloc(int s, int c)
 	return ci;
 }
 
+void command_pwd(struct packet* shp, struct packet* data, int sfd_client, char* lpwd)
+{
+	int x;
+	shp->type = DATA;
+	strcpy(shp->buffer, lpwd);
+	data = htonp(shp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+}
+

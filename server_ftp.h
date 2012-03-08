@@ -23,3 +23,5 @@ struct client_info
 
 struct client_info* client_info_alloc(int, int);
 
+void command_pwd(struct packet*, struct packet*, int, char*);
+

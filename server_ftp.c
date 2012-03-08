@@ -53,6 +53,8 @@ void* serve_client(void* info)
 	struct packet* data = (struct packet*) malloc(size_packet);
 	struct packet* shp;
 	char lpwd[LENBUFFER];
+	if(!getcwd(lpwd, sizeof lpwd))
+		er("getcwd()", 0);
 	struct client_info* ci = (struct client_info*) info;
 	sfd_client = ci->sfd;
 	connection_id = ci->cid;
@@ -75,6 +77,16 @@ void* serve_client(void* info)
 		
 		if(shp->type == REQU)
 		{
+			switch(shp->comid)
+			{
+				case PWD:
+					command_pwd(shp, data, sfd_client, lpwd);
+					break;
+				default:
+					// print error
+					break;
+			}
+			/*
 			//send info and then proceed to complete the request
 			shp->type = INFO;
 			strcpy(path, shp->buffer);
@@ -85,6 +97,7 @@ void* serve_client(void* info)
 			
 			send_file(path, sfd_client, shp);
 			send_TERM(sfd_client, shp);
+			*/
 		}
 		else
 		{

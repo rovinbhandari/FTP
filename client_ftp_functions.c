@@ -104,3 +104,20 @@ void printcommand(struct command* c)
 	printf("\n");
 }
 
+void command_pwd(struct packet* chp, struct packet* data, int sfd_client)
+{
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = PWD;
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	if(chp->type == DATA && chp->comid == PWD && strlen(chp->buffer) > 0)
+		printf("\t%s\n", chp->buffer);
+	else
+		fprintf(stderr, "\tError retrieving information");
+}

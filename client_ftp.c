@@ -28,8 +28,10 @@ int main(int argc, char* argv[])
 	
 	struct command* cmd;
 	char lpwd[LENBUFFER], pwd[LENBUFFER];
+	if(!getcwd(lpwd, sizeof lpwd))
+		er("getcwd()", 0);
 	char userinput[LENUSERINPUT];
-	client_command_loop: while(1)
+	while(1)
 	{
 		printf("\t> ");
 		fgets(userinput, LENUSERINPUT, stdin);
@@ -60,10 +62,10 @@ int main(int argc, char* argv[])
 				
 				break;
 			case PWD:
-				
+				command_pwd(chp, data, sfd_client);
 				break;
 			case LPWD:
-				
+				printf("\t%s\n", lpwd);
 				break;
 			case DIR:
 			case LS:
@@ -80,12 +82,13 @@ int main(int argc, char* argv[])
 				// for later
 				break;
 			case EXIT:
-				break client_command_loop;
+				goto outside_client_command_loop;
 			default:
 				// display error
 				break;
 		}
 	}
+	outside_client_command_loop:
 	
 	/*
 	chp->type = REQU;

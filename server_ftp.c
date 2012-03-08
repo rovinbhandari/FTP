@@ -52,7 +52,7 @@ void* serve_client(void* info)
 	int sfd_client, connection_id, x;
 	struct packet* data = (struct packet*) malloc(size_packet);
 	struct packet* shp;
-	char path[LENBUFFER];
+	char lpwd[LENBUFFER];
 	struct client_info* ci = (struct client_info*) info;
 	sfd_client = ci->sfd;
 	connection_id = ci->cid;
@@ -70,7 +70,8 @@ void* serve_client(void* info)
 		if(shp->type == TERM)
 			break;
 		
-		shp->conid = connection_id;
+		if(shp->conid == -1)
+			shp->conid = connection_id;
 		
 		if(shp->type == REQU)
 		{

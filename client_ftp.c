@@ -28,8 +28,6 @@ int main(int argc, char* argv[])
 	
 	struct command* cmd;
 	char lpwd[LENBUFFER], pwd[LENBUFFER];
-	if(!getcwd(lpwd, sizeof lpwd))
-		er("getcwd()", 0);
 	char userinput[LENUSERINPUT];
 	while(1)
 	{
@@ -59,12 +57,15 @@ int main(int argc, char* argv[])
 				
 				break;
 			case LCD:
-				
+				if((x = chdir(*cmd->paths)) == -1)
+					fprintf(stderr, "Wrong path.");
 				break;
 			case PWD:
 				command_pwd(chp, data, sfd_client);
 				break;
 			case LPWD:
+				if(!getcwd(lpwd, sizeof lpwd))
+					er("getcwd()", 0);
 				printf("\t%s\n", lpwd);
 				break;
 			case DIR:

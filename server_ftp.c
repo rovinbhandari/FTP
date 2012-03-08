@@ -53,8 +53,6 @@ void* serve_client(void* info)
 	struct packet* data = (struct packet*) malloc(size_packet);
 	struct packet* shp;
 	char lpwd[LENBUFFER];
-	if(!getcwd(lpwd, sizeof lpwd))
-		er("getcwd()", 0);
 	struct client_info* ci = (struct client_info*) info;
 	sfd_client = ci->sfd;
 	connection_id = ci->cid;
@@ -80,6 +78,8 @@ void* serve_client(void* info)
 			switch(shp->comid)
 			{
 				case PWD:
+					if(!getcwd(lpwd, sizeof lpwd))
+						er("getcwd()", 0);
 					command_pwd(shp, data, sfd_client, lpwd);
 					break;
 				default:

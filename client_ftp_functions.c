@@ -122,3 +122,4 @@ void command_pwd(struct packet* chp, struct packet* data, int sfd_client)
 	else
 		fprintf(stderr, "\tError retrieving information");
 }
+

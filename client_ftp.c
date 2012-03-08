@@ -54,11 +54,14 @@ int main(int argc, char* argv[])
 				
 				break;
 			case CD:
-				
+				if(!cmd->npaths)
+					fprintf(stderr, "No path given.\n");
+				else
+					command_cd(chp, data, sfd_client, *cmd->paths);
 				break;
 			case LCD:
 				if((x = chdir(*cmd->paths)) == -1)
-					fprintf(stderr, "Wrong path.");
+					fprintf(stderr, "Wrong path.\n");
 				break;
 			case PWD:
 				command_pwd(chp, data, sfd_client);

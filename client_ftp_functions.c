@@ -120,6 +120,26 @@ void command_pwd(struct packet* chp, struct packet* data, int sfd_client)
 	if(chp->type == DATA && chp->comid == PWD && strlen(chp->buffer) > 0)
 		printf("\t%s\n", chp->buffer);
 	else
-		fprintf(stderr, "\tError retrieving information");
+		fprintf(stderr, "\tError retrieving information.\n");
+}
+
+void command_cd(struct packet* chp, struct packet* data, int sfd_client, char* path)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = CD;
+	strcpy(chp->buffer, path);
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	if(chp->type == INFO && chp->comid == CD && !strcmp(chp->buffer, "success"))
+		;
+	else
+		fprintf(stderr, "\tError executing command on the server.\n");
 }
 

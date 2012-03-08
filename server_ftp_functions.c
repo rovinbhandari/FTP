@@ -20,3 +20,13 @@ void command_pwd(struct packet* shp, struct packet* data, int sfd_client, char* 
 		er("send()", x);
 }
 
+void command_cd(struct packet* shp, struct packet* data, int sfd_client, char* message)
+{
+	int x;
+	shp->type = INFO;
+	strcpy(shp->buffer, message);
+	data = htonp(shp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+}
+

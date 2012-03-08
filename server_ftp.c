@@ -82,6 +82,11 @@ void* serve_client(void* info)
 						er("getcwd()", 0);
 					command_pwd(shp, data, sfd_client, lpwd);
 					break;
+				case CD:
+					if((x = chdir(shp->buffer)) == -1)
+						fprintf(stderr, "Wrong path.\n");
+					command_cd(shp, data, sfd_client, x == -1 ? "fail" : "success");
+					break;
 				default:
 					// print error
 					break;

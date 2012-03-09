@@ -143,7 +143,7 @@ void command_cd(struct packet* chp, struct packet* data, int sfd_client, char* p
 		fprintf(stderr, "\tError executing command on the server.\n");
 }
 
-void command_ls(char* lpwd)
+void command_lls(char* lpwd)
 {
 	DIR* d = opendir(lpwd);
 	if(!d)
@@ -152,5 +152,29 @@ void command_ls(char* lpwd)
 	while(e = readdir(d))
 		printf("\t%s\t%s\n", e->d_type == 4 ? "DIR:" : "FILE:", e->d_name);
 	closedir(d);
+}
+
+void command_ls(struct packet* chp, struct packet* data, int sfd_client)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = LS;
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	while(chp->type != EOT)
+	{
+		if(chp->type == DATA && chp->comid == LS && strlen(chp->buffer))
+			printf("\t%s\n", chp->buffer);
+		/*
+		else
+			fprintf(stderr, "\tError executing command on the server.\n");
+		*/
+		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+			er("recv()", x);
+		chp = ntohp(data);
+	}
 }
 

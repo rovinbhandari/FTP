@@ -2,37 +2,38 @@
 
 static size_t size_packet = sizeof(struct packet);
 
-void send_EOT(int sfd, struct packet* hp)
+void send_EOT(struct packet* hp, struct packet* data, int sfd)
 {
 	int x;
 	hp->type = EOT;
-	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
+	data = htonp(hp);
+	if((x = send(sfd, data, size_packet, 0)) != size_packet)
 		er("send()", x);
 }
 
-void send_TERM(int sfd, struct packet* hp)
+void send_TERM(struct packet* hp, struct packet* data, int sfd)
 {
 	int x;
 	hp->type = TERM;
-	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
+	data = htonp(hp);
+	if((x = send(sfd, data, size_packet, 0)) != size_packet)
 		er("send()", x);
 }
 
-void send_file(char* path, int sfd, struct packet* hp)
+void send_file(struct packet* hp, struct packet* data, int sfd, char* filename)
 {
 	int x;
 	strcpy(hp->buffer, "test");
 	hp->type = DATA;
-	if((x = send(sfd, htonp(hp), size_packet, 0)) != size_packet)
+	data = htonp(hp);
+	if((x = send(sfd, data, size_packet, 0)) != size_packet)
 		er("send()", x);
-	send_EOT(sfd, hp);		
+	send_EOT(hp, data, sfd);		
 }
 
-void receive_file(char* filename, int sfd, struct packet* hp)
+void receive_file(struct packet* hp, struct packet* data, int sfd, char* filename)
 {
 	int x;
-	struct packet* data = (struct packet*) malloc(size_packet);
-	set0(data);
 	FILE* fp = fopen(filename, "wb");
 	if(!fp)
 		er("fopen()", (int) fp);

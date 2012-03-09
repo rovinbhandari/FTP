@@ -30,3 +30,21 @@ void command_cd(struct packet* shp, struct packet* data, int sfd_client, char* m
 		er("send()", x);
 }
 
+void command_ls(struct packet* shp, struct packet* data, int sfd_client, char* lpwd)
+{
+	int x;
+	shp->type = DATA;
+	DIR* d = opendir(lpwd);
+	if(!d)
+		er("opendir()", (int) d);
+	struct dirent* e;
+	while(e = readdir(d))
+	{
+		sprintf(shp->buffer, "%s\t%s", e->d_type == 4 ? "DIR:" : "FILE:", e->d_name);
+		data = htonp(shp);
+		if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+			er("send()", x);
+	}
+	send_EOT(shp, data, sfd_client);
+}
+

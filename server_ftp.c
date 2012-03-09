@@ -87,6 +87,11 @@ void* serve_client(void* info)
 						fprintf(stderr, "Wrong path.\n");
 					command_cd(shp, data, sfd_client, x == -1 ? "fail" : "success");
 					break;
+				case LS:
+					if(!getcwd(lpwd, sizeof lpwd))
+						er("getcwd()", 0);
+					command_ls(shp, data, sfd_client, lpwd);
+					break;
 				default:
 					// print error
 					break;
@@ -108,7 +113,7 @@ void* serve_client(void* info)
 		{
 			//show error, send TERM and break
 			fprintf(stderr, "packet incomprihensible. closing connection.\n");
-			send_TERM(sfd_client, shp);
+			send_TERM(shp, data, sfd_client);
 			break;
 		}
 	}

@@ -73,13 +73,13 @@ int main(int argc, char* argv[])
 				break;
 			case DIR_:
 			case LS:
-				
+				command_ls(chp, data, sfd_client);
 				break;
 			case LDIR:
 			case LLS:
 				if(!getcwd(lpwd, sizeof lpwd))
 					er("getcwd()", 0);
-				command_ls(lpwd);
+				command_lls(lpwd);
 				break;
 			case RGET:
 				// for later

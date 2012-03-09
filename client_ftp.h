@@ -19,5 +19,6 @@ void printcommand(struct command*);
 
 void command_pwd(struct packet*, struct packet*, int);
 void command_cd(struct packet*, struct packet*, int, char*);
-void command_ls(char*);
+void command_lls(char*);
+void command_ls(struct packet*, struct packet*, int);
 

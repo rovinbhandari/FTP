@@ -55,6 +55,7 @@ void command_get(struct packet* shp, struct packet* data, int sfd_client)
 	shp->type = INFO;
 	shp->comid = GET;
 	strcpy(shp->buffer, f ? "File found; processing" : "Error opening file.");
+	printpacket(shp, HP);
 	data = htonp(shp);
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);

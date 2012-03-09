@@ -92,6 +92,9 @@ void* serve_client(void* info)
 						er("getcwd()", 0);
 					command_ls(shp, data, sfd_client, lpwd);
 					break;
+				case GET:
+					command_get(shp, data, sfd_client);
+					break;
 				default:
 					// print error
 					break;

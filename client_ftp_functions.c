@@ -183,6 +183,15 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 	FILE* f = fopen(filename, "wb");
 	if(!f)
 		er("fopen()", (int) f);
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = GET;
+	strcpy(chp->buffer, filename);
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
 	receive_file(chp, data, sfd_client, f);
 	fclose(f);
 }

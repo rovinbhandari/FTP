@@ -1,0 +1,2 @@
+remove set0(chp) and chp->conid = -1 from the functions in client_udp_functions.c so that the conid is maintained.
+

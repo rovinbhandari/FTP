@@ -143,3 +143,14 @@ void command_cd(struct packet* chp, struct packet* data, int sfd_client, char* p
 		fprintf(stderr, "\tError executing command on the server.\n");
 }
 
+void command_ls(char* lpwd)
+{
+	DIR* d = opendir(lpwd);
+	if(!d)
+		er("opendir()", (int) d);
+	struct dirent* e;
+	while(e = readdir(d))
+		printf("\t%s\t%s\n", e->d_type == 4 ? "DIR:" : "FILE:", e->d_name);
+	closedir(d);
+}
+

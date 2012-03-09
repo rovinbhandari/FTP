@@ -71,13 +71,15 @@ int main(int argc, char* argv[])
 					er("getcwd()", 0);
 				printf("\t%s\n", lpwd);
 				break;
-			case DIR:
+			case DIR_:
 			case LS:
 				
 				break;
 			case LDIR:
 			case LLS:
-				
+				if(!getcwd(lpwd, sizeof lpwd))
+					er("getcwd()", 0);
+				command_ls(lpwd);
 				break;
 			case RGET:
 				// for later

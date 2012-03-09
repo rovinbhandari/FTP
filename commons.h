@@ -79,6 +79,8 @@
 		stat()
 */
 
+#include <dirent.h>
+
 #define	DEBUG		1
 
 #define	LENBUFFER	506		// so as to make the whole packet well-rounded ( = 512 bytes)
@@ -134,7 +136,7 @@ enum COMMAND
 		LCD,
 		MGETWILD,
 		MPUTWILD,
-		DIR,
+		DIR_,		// _ to avoid conflict with directory pointer DIR
 		LDIR,
 		LS,
 		LLS,

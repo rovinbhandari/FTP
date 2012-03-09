@@ -50,15 +50,20 @@ void command_ls(struct packet* shp, struct packet* data, int sfd_client, char* l
 
 void command_get(struct packet* shp, struct packet* data, int sfd_client)
 {
-	FILE* f = fopen(shp->buffer, "rb");
+	int x;
+	FILE* f = fopen(shp->buffer, "rb");	// Yo!
 	shp->type = INFO;
 	shp->comid = GET;
 	strcpy(shp->buffer, f ? "File found; processing" : "Error opening file.");
+	data = htonp(shp);
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);
 	if(f)
+	{
+		shp->type = DATA;
 		send_file(shp, data, sfd_client, f);
-	fclose(f);
+		fclose(f);
+	}
 	send_EOT(shp, data, sfd_client);
 }
 

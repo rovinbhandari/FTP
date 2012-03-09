@@ -192,7 +192,16 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 	data = htonp(chp);
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);
-	receive_file(chp, data, sfd_client, f);
-	fclose(f);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	if(chp->type == INFO && chp->comid == GET && strlen(chp->buffer))
+	{
+		printf("\t%s\n", chp->buffer);
+		receive_file(chp, data, sfd_client, f);
+		fclose(f);
+	}
+	else
+		fprintf(stderr, "Error getting remote file.\n");
 }
 

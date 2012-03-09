@@ -57,8 +57,8 @@ void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 		hp = ntohp(data);
 		//printpacket(hp, HP);
 	}
-	fprintf(stderr, "\t%d bytes written.\n", i);
 	fprintf(stderr, "\t%d data packets received.\n", --j);
+	fprintf(stderr, "\t%d bytes written.\n", i);
 	if(hp->type == EOT)
 		return;
 	else

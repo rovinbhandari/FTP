@@ -16,7 +16,7 @@ struct packet* ntohp(struct packet* np)
 	hp->type = ntohs(np->type);
 	hp->comid = ntohs(np->comid);
 	hp->datalen = ntohs(np->datalen);
-	strcpy(hp->buffer, np->buffer);
+	memcpy(hp->buffer, np->buffer, LENBUFFER);
 	
 	return hp;	
 }
@@ -30,7 +30,7 @@ struct packet* htonp(struct packet* hp)
 	np->type = ntohs(hp->type);
 	np->comid = ntohs(hp->comid);
 	np->datalen = ntohs(hp->datalen);
-	strcpy(np->buffer, hp->buffer);
+	memcpy(np->buffer, hp->buffer, LENBUFFER);
 	
 	return np;
 }

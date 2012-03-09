@@ -107,8 +107,6 @@ enum TYPE
 	}						\
 	while(0)
 
-//TODO: Make two kinds of packets: one for INFO, the other for DATA.
-
 #define	LENBUFFER	504		// so as to make the whole packet well-rounded ( = 512 bytes)
 struct packet
 {

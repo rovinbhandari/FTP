@@ -15,6 +15,7 @@ struct packet* ntohp(struct packet* np)
 	hp->conid = ntohs(np->conid);
 	hp->type = ntohs(np->type);
 	hp->comid = ntohs(np->comid);
+	hp->datalen = ntohs(np->datalen);
 	strcpy(hp->buffer, np->buffer);
 	
 	return hp;	
@@ -28,6 +29,7 @@ struct packet* htonp(struct packet* hp)
 	np->conid = ntohs(hp->conid);
 	np->type = ntohs(hp->type);
 	np->comid = ntohs(hp->comid);
+	np->datalen = ntohs(hp->datalen);
 	strcpy(np->buffer, hp->buffer);
 	
 	return np;
@@ -46,6 +48,7 @@ void printpacket(struct packet* p, int ptype)
 	printf("\t\tconid = %d\n", p->conid);
 	printf("\t\ttype = %d\n", p->type);
 	printf("\t\tcomid = %d\n", p->comid);
+	printf("\t\tdatalen = %d\n", p->datalen);
 	printf("\t\tbuffer = %s\n\n", p->buffer);
 	
 	fflush(stdout);

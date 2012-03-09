@@ -23,19 +23,20 @@ void send_TERM(struct packet* hp, struct packet* data, int sfd)
 void send_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 {
 	int x;
-	int i = 0;
+	int i = 0, j = 0;
 	while(!feof(f))
 	{
 		memset(hp->buffer, '\0', sizeof(char) * LENBUFFER);
-		fread(hp->buffer, 1, LENBUFFER, f);
-		i++;
+		hp->datalen = fread(hp->buffer, 1, LENBUFFER - 1, f);
+		i += hp->datalen;
 		//printpacket(hp, HP);
 		data = htonp(hp);
 		if((x = send(sfd, data, size_packet, 0)) != size_packet)
 			er("send()", x);
+		j++;
 	}
-	fprintf(stderr, "\t%d bytes read.\n", i * LENBUFFER);
-	fprintf(stderr, "\t%d packets sent.\n", i);
+	fprintf(stderr, "\t%d bytes read.\n", i);
+	fprintf(stderr, "\t%d data packets sent.\n", j);
 }
 
 void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
@@ -49,8 +50,7 @@ void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 	//printpacket(hp, HP);
 	while(hp->type == DATA)
 	{
-		fwrite(hp->buffer, 1, strlen(hp->buffer), f);
-		i += strlen(hp->buffer);
+		i += fwrite(hp->buffer, 1, hp->datalen, f);
 		if((x = recv(sfd, data, size_packet, 0)) <= 0)
 			er("recv()", x);
 		j++;
@@ -58,7 +58,7 @@ void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 		//printpacket(hp, HP);
 	}
 	fprintf(stderr, "\t%d bytes written.\n", i);
-	fprintf(stderr, "\t%d packets received.\n", j);
+	fprintf(stderr, "\t%d data packets received.\n", --j);
 	if(hp->type == EOT)
 		return;
 	else

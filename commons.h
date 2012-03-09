@@ -83,7 +83,6 @@
 
 #define	DEBUG		1
 
-#define	LENBUFFER	506		// so as to make the whole packet well-rounded ( = 512 bytes)
 #define	PORTSERVER	8487
 
 enum TYPE
@@ -110,11 +109,13 @@ enum TYPE
 
 //TODO: Make two kinds of packets: one for INFO, the other for DATA.
 
+#define	LENBUFFER	504		// so as to make the whole packet well-rounded ( = 512 bytes)
 struct packet
 {
 	short int conid;
 	short int type;
 	short int comid;
+	short int datalen;
 	char buffer[LENBUFFER];
 };
 

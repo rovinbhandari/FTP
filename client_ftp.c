@@ -40,7 +40,10 @@ int main(int argc, char* argv[])
 		switch(cmd->id)
 		{
 			case GET:
-				
+				if(cmd->npaths)
+					command_get(chp, data, sfd_client, *cmd->paths);
+				else
+					fprintf(stderr, "No path to file given.\n");
 				break;
 			case PUT:
 				
@@ -54,10 +57,10 @@ int main(int argc, char* argv[])
 				
 				break;
 			case CD:
-				if(!cmd->npaths)
-					fprintf(stderr, "No path given.\n");
-				else
+				if(cmd->npaths)
 					command_cd(chp, data, sfd_client, *cmd->paths);
+				else
+					fprintf(stderr, "No path given.\n");
 				break;
 			case LCD:
 				if((x = chdir(*cmd->paths)) == -1)

@@ -178,3 +178,12 @@ void command_ls(struct packet* chp, struct packet* data, int sfd_client)
 	}
 }
 
+void command_get(struct packet* chp, struct packet* data, int sfd_client, char* filename)
+{
+	FILE* f = fopen(filename, "wb");
+	if(!f)
+		er("fopen()", (int) f);
+	receive_file(chp, data, sfd_client, f);
+	fclose(f);
+}
+

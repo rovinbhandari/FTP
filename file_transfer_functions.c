@@ -20,7 +20,7 @@ void send_TERM(struct packet* hp, struct packet* data, int sfd)
 		er("send()", x);
 }
 
-void send_file(struct packet* hp, struct packet* data, int sfd, char* filename)
+void send_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 {
 	int x;
 	strcpy(hp->buffer, "test");
@@ -31,24 +31,21 @@ void send_file(struct packet* hp, struct packet* data, int sfd, char* filename)
 	send_EOT(hp, data, sfd);		
 }
 
-void receive_file(struct packet* hp, struct packet* data, int sfd, char* filename)
+void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 {
 	int x;
-	FILE* fp = fopen(filename, "wb");
-	if(!fp)
-		er("fopen()", (int) fp);
 	while(hp->type == DATA)
 	{
-		fwrite(hp->buffer, 1, strlen(hp->buffer), fp);
+		fwrite(hp->buffer, 1, strlen(hp->buffer), f);
 		if((x = recv(sfd, data, size_packet, 0)) <= 0)
 			er("recv()", x);
 		hp = ntohp(data);
 	}
 	if(hp->type == EOT)
-		fclose(fp);
+		return;
 	else
 	{
-		fprintf(stderr, "Error occured while writing to file. Exiting...\n");
+		fprintf(stderr, "Error occured while downloading remote file.\n");
 		exit(2);
 	}
 }

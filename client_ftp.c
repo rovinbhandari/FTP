@@ -65,7 +65,10 @@ int main(int argc, char* argv[])
 				break;
 			case MPUT:
 			case MPUTWILD:
-				
+				if(cmd->npaths)
+					command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
+				else
+					fprintf(stderr, "No path to file given.\n");
 				break;
 			case CD:
 				if(cmd->npaths)

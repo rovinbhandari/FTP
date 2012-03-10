@@ -258,3 +258,17 @@ void command_mget(struct packet* chp, struct packet* data, int sfd_client, int n
 		fprintf(stderr, "Not all files could be downloaded.\n");
 }
 
+void command_mput(struct packet* chp, struct packet* data, int sfd_client, int n, char** filenames)
+{
+	int i;
+	char* filename;
+	for(i = 0; i < n; i++)
+	{
+		filename = *(filenames + i);
+		printf("\tProcessing file %d of %d:\t%s\n", i + 1, n, filename);
+		command_put(chp, data, sfd_client, filename);
+	}
+	if(i != n)
+		fprintf(stderr, "Not all files could be uploaded.\n");
+}
+

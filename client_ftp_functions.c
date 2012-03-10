@@ -43,6 +43,7 @@ static void append_path(struct command* c, char* s)
 	int i;
 	for(i = 0; i < strlen(s); i++)
 		*(temps + i) = *(s + i) == ':' ? ' ' : *(s + i);
+	*(temps + i) = '\0';
 
 	*(temppaths + c->npaths - 1) = temps;
 
@@ -184,7 +185,10 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 {
 	FILE* f = fopen(filename, "wb");
 	if(!f)
-		er("fopen()", (int) f);
+	{
+		fprintf(stderr, "File could not be opened for writing. Aborting...\n");
+		return;
+	}
 	int x;
 	set0(chp);
 	chp->type = REQU;
@@ -206,5 +210,38 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 	}
 	else
 		fprintf(stderr, "Error getting remote file.\n");
+}
+
+void command_put(struct packet* chp, struct packet* data, int sfd_client, char* filename)
+{
+	FILE* f = fopen(filename, "rb");	// Yo!
+	if(!f)
+	{
+		fprintf(stderr, "File could not be opened for reading. Aborting...\n");
+		return;
+	}
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = PUT;
+	strcpy(chp->buffer, filename);
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	//printpacket(chp, HP);
+	if(chp->type == INFO && chp->comid == PUT && strlen(chp->buffer))
+	{
+		printf("\t%s\n", chp->buffer);
+		chp->type = DATA;
+		send_file(chp, data, sfd_client, f);
+		fclose(f);
+	}
+	else
+		fprintf(stderr, "Error sending file.\n");
+	send_EOT(chp, data, sfd_client);
 }
 

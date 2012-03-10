@@ -68,3 +68,21 @@ void command_get(struct packet* shp, struct packet* data, int sfd_client)
 	send_EOT(shp, data, sfd_client);
 }
 
+void command_put(struct packet* shp, struct packet* data, int sfd_client)
+{
+	int x;
+	FILE* f = fopen(shp->buffer, "wb");	// Yo!
+	shp->type = INFO;
+	shp->comid = PUT;
+	strcpy(shp->buffer, f ? "Everything in order; processing" : "Error opening file for writing on server side.");
+	//printpacket(shp, HP);
+	data = htonp(shp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if(f)
+	{
+		receive_file(shp, data, sfd_client, f);
+		fclose(f);
+	}
+}
+

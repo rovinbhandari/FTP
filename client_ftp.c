@@ -51,7 +51,10 @@ int main(int argc, char* argv[])
 					fprintf(stderr, "No path to file given.\n");
 				break;
 			case PUT:
-				
+				if(cmd->npaths)
+					command_put(chp, data, sfd_client, *cmd->paths);
+				else
+					fprintf(stderr, "No path to file given.\n");
 				break;
 			case MGET:
 			case MGETWILD:

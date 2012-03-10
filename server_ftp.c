@@ -95,6 +95,9 @@ void* serve_client(void* info)
 				case GET:
 					command_get(shp, data, sfd_client);
 					break;
+				case PUT:
+					command_put(shp, data, sfd_client);
+					break;
 				default:
 					// print error
 					break;

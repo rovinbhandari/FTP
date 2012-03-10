@@ -251,7 +251,7 @@ void command_mget(struct packet* chp, struct packet* data, int sfd_client, int n
 	for(i = 0; i < n; i++)
 	{
 		filename = *(filenames + i);
-		printf("\tProcessing file %d: %s\n", i + 1, filename);
+		printf("\tProcessing file %d of %d:\t%s\n", i + 1, n, filename);
 		command_get(chp, data, sfd_client, filename);
 	}
 	if(i != n)

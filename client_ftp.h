@@ -26,4 +26,5 @@ void command_put(struct packet*, struct packet*, int, char*);
 void command_mget(struct packet*, struct packet*, int, int, char**);
 void command_mput(struct packet*, struct packet*, int, int, char**);
 void command_mgetwild(struct packet*, struct packet*, int);
+void command_mputwild(struct packet*, struct packet*, int, char*);
 

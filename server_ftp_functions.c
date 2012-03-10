@@ -40,7 +40,7 @@ void command_ls(struct packet* shp, struct packet* data, int sfd_client, char* l
 	struct dirent* e;
 	while(e = readdir(d))
 	{
-		sprintf(shp->buffer, "%s\t%s", e->d_type == 4 ? "DIR:" : "FILE:", e->d_name);
+		sprintf(shp->buffer, "%s\t%s", e->d_type == 4 ? "DIR:" : e->d_type == 8 ? "FILE:" : "UNDEF:", e->d_name);
 		data = htonp(shp);
 		if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 			er("send()", x);

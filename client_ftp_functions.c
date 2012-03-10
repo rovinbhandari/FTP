@@ -82,6 +82,8 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 	}
 	if(cmd->id == MGET && !strcmp(*cmd->paths, "*"))
 		cmd->id = MGETWILD;
+	else if(cmd->id == MPUT && !strcmp(*cmd->paths, "*"))
+		cmd->id = MPUTWILD;
 	if(cmd->id != -1)
 		return cmd;
 	else
@@ -152,7 +154,7 @@ void command_lls(char* lpwd)
 		er("opendir()", (int) d);
 	struct dirent* e;
 	while(e = readdir(d))
-		printf("\t%s\t%s\n", e->d_type == 4 ? "DIR:" : "FILE:", e->d_name);
+		printf("\t%s\t%s\n", e->d_type == 4 ? "DIR:" : e->d_type == 8 ? "FILE:" : "UNDEF", e->d_name);
 	closedir(d);
 }
 
@@ -297,3 +299,21 @@ void command_mgetwild(struct packet* chp, struct packet* data, int sfd_client)
 	}
 	command_mget(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }
+
+void command_mputwild(struct packet* chp, struct packet* data, int sfd_client, char* lpwd)
+{
+	DIR* d = opendir(lpwd);
+	if(!d)
+		er("opendir()", (int) d);
+	struct dirent* e;
+	struct command* cmd = (struct command*) malloc(sizeof(struct command));
+	cmd->id = MPUTWILD;
+	cmd->npaths = 0;
+	cmd->paths = NULL;
+	while(e = readdir(d))
+		if(e->d_type == 8)
+			append_path(cmd, e->d_name);
+	closedir(d);
+	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
+}
+

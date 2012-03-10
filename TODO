@@ -3,4 +3,5 @@ implement different connections for control and for data.
 implement command queueing on client/server.
 implement multi-threading on server side.
 put the server on port 21.
+make the client capable of parsing spaces in filenames.
 

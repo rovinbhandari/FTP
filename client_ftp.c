@@ -32,11 +32,16 @@ int main(int argc, char* argv[])
 	while(1)
 	{
 		printf("\t> ");
-		fgets(userinput, LENUSERINPUT, stdin);
+		fgets(userinput, LENUSERINPUT, stdin);	// in order to give \
+					a filename with spaces, put ':' \
+					instead of ' '. If a command needs \
+					x paths, and y (y > x) paths are \
+					provided, y - x paths will be \
+					ignored.
 		cmd = userinputtocommand(userinput);
 		if(!cmd)
 			continue;
-		//printcommand(cmd);
+		printcommand(cmd);
 		switch(cmd->id)
 		{
 			case GET:

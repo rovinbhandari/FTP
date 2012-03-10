@@ -40,7 +40,9 @@ static void append_path(struct command* c, char* s)
 		memcpy(temppaths, c->paths, (c->npaths - 1) * sizeof(char*));
 
 	char* temps = (char*) malloc((strlen(s) + 1) * sizeof(char));
-	strcpy(temps, s);
+	int i;
+	for(i = 0; i < strlen(s); i++)
+		*(temps + i) = *(s + i) == ':' ? ' ' : *(s + i);
 
 	*(temppaths + c->npaths - 1) = temps;
 

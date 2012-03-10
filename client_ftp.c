@@ -58,7 +58,10 @@ int main(int argc, char* argv[])
 				break;
 			case MGET:
 			case MGETWILD:
-				
+				if(cmd->npaths)
+					command_mget(chp, data, sfd_client, cmd->npaths, cmd->paths);
+				else
+					fprintf(stderr, "No path to file given.\n");
 				break;
 			case MPUT:
 			case MPUTWILD:

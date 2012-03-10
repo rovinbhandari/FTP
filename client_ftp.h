@@ -23,4 +23,5 @@ void command_lls(char*);
 void command_ls(struct packet*, struct packet*, int);
 void command_get(struct packet*, struct packet*, int, char*);
 void command_put(struct packet*, struct packet*, int, char*);
+void command_mget(struct packet*, struct packet*, int, int, char**);
 

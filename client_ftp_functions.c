@@ -35,6 +35,7 @@ static const char commandlist[NCOMMANDS][10] =
 
 static void append_path(struct command* c, char* s)
 {
+	c->npaths++;
 	char** temppaths = (char**) malloc(c->npaths * sizeof(char*));
 	if(c->npaths > 1)
 		memcpy(temppaths, c->paths, (c->npaths - 1) * sizeof(char*));
@@ -77,11 +78,10 @@ struct command* userinputtocommand(char s[LENUSERINPUT])
 			 associated with the "if inside the for loop". \
 			 #BUGFIX
 		else
-		{
-			cmd->npaths++;
 			append_path(cmd, token);
-		}
 	}
+	if(cmd->id == MGET && !strcmp(*cmd->paths, "*"))
+		cmd->id = MGETWILD;
 	if(cmd->id != -1)
 		return cmd;
 	else
@@ -272,3 +272,28 @@ void command_mput(struct packet* chp, struct packet* data, int sfd_client, int n
 		fprintf(stderr, "Not all files could be uploaded.\n");
 }
 
+void command_mgetwild(struct packet* chp, struct packet* data, int sfd_client)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = LS;
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	struct command* cmd = (struct command*) malloc(sizeof(struct command));
+	cmd->id = MGETWILD;
+	cmd->npaths = 0;
+	cmd->paths = NULL;
+	while(chp->type != EOT)
+	{
+		if(chp->type == DATA && chp->comid == LS && strlen(chp->buffer))
+		if(*chp->buffer == 'F')
+			append_path(cmd, chp->buffer + 6);
+		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+			er("recv()", x);
+		chp = ntohp(data);
+	}
+	command_mget(chp, data, sfd_client, cmd->npaths, cmd->paths);
+}

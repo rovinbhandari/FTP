@@ -57,11 +57,13 @@ int main(int argc, char* argv[])
 					fprintf(stderr, "No path to file given.\n");
 				break;
 			case MGET:
-			case MGETWILD:
 				if(cmd->npaths)
 					command_mget(chp, data, sfd_client, cmd->npaths, cmd->paths);
 				else
 					fprintf(stderr, "No path to file given.\n");
+				break;
+			case MGETWILD:
+				command_mgetwild(chp, data, sfd_client);
 				break;
 			case MPUT:
 			case MPUTWILD:

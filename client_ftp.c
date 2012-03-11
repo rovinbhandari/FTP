@@ -104,11 +104,26 @@ int main(int argc, char* argv[])
 					er("getcwd()", 0);
 				command_lls(lpwd);
 				break;
+			case MKDIR:
+				break;
+			case LMKDIR:
+				if(cmd->npaths)
+				{
+					if((x = mkdir(*cmd->paths, 0777)) == -1)
+						fprintf(stderr, "Error in creating directory.\n");
+				}
+				else
+					fprintf(stderr, "No path to directory given.\n");
+				break;
 			case RGET:
 				// for later
 				break;
 			case RPUT:
-				// for later
+				if(!getcwd(lpwd, sizeof lpwd))
+					er("getcwd()", 0);
+				command_rput(chp, data, sfd_client);
+				if((x = chdir(lpwd)) == -1)
+					fprintf(stderr, "Wrong path.\n");
 				break;
 			case EXIT:
 				goto outside_client_command_loop;

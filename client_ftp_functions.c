@@ -22,6 +22,9 @@ static const char commandlist[NCOMMANDS][10] =
 		"ls",
 		"lls",
 		
+		"mkdir",
+		"lmkdir",
+
 		"rget",
 		"rput",
 		
@@ -313,6 +316,37 @@ void command_mputwild(struct packet* chp, struct packet* data, int sfd_client, c
 	while(e = readdir(d))
 		if(e->d_type == 8)
 			append_path(cmd, e->d_name);
+	closedir(d);
+	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
+}
+
+void command_rput(struct packet* chp, struct packet* data, int sfd_client)
+{
+	static char lpwd[LENBUFFER];
+	if(!getcwd(lpwd, sizeof lpwd))
+		er("getcwd()", 0);
+	int x;
+	DIR* d = opendir(lpwd);
+	if(!d)
+		er("opendir()", (int) d);
+	struct dirent* e;
+	struct command* cmd = (struct command*) malloc(sizeof(struct command));
+	cmd->id = RPUT;
+	cmd->npaths = 0;
+	cmd->paths = NULL;
+	while(e = readdir(d))
+		if(e->d_type == 8)
+			append_path(cmd, e->d_name);
+		else if(e->d_type == 4 && strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
+		{
+			// send packet for making directory on the server side.
+		
+			if((x = chdir(e->d_name)) == -1)
+				er("chdir()", x);
+			command_rput(chp, data, sfd_client);
+			if((x = chdir("..")) == -1)
+				er("chdir()", x);
+		}
 	closedir(d);
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }

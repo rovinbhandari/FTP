@@ -71,7 +71,7 @@ void command_get(struct packet* shp, struct packet* data, int sfd_client)
 void command_put(struct packet* shp, struct packet* data, int sfd_client)
 {
 	int x;
-	FILE* f = fopen(shp->buffer, "wb");	// Yo!
+	FILE* f = fopen(shp->buffer, "wb");
 	shp->type = INFO;
 	shp->comid = PUT;
 	strcpy(shp->buffer, f ? "Everything in order; processing" : "Error opening file for writing on server side.");

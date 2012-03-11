@@ -124,7 +124,7 @@ struct packet* htonp(struct packet*);
 
 void printpacket(struct packet*, int);
 
-#define NCOMMANDS 17
+#define NCOMMANDS 19
 enum COMMAND
 	{
 		GET,
@@ -139,6 +139,8 @@ enum COMMAND
 		LDIR,
 		LS,
 		LLS,
+		MKDIR,
+		LMKDIR,
 		RGET,
 		RPUT,
 		PWD,

@@ -86,3 +86,13 @@ void command_put(struct packet* shp, struct packet* data, int sfd_client)
 	}
 }
 
+void command_mkdir(struct packet* shp, struct packet* data, int sfd_client, char* message)
+{
+	int x;
+	shp->type = INFO;
+	strcpy(shp->buffer, message);
+	data = htonp(shp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+}
+

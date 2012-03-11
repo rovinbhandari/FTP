@@ -351,3 +351,23 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }
 
+void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = MKDIR;
+	strcpy(chp->buffer, dirname);
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	if(chp->type == INFO && chp->comid == MKDIR && !strcmp(chp->buffer, "success"))
+		;
+	else
+		fprintf(stderr, "\tError executing command on the server.\n");
+}
+

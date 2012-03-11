@@ -105,6 +105,10 @@ int main(int argc, char* argv[])
 				command_lls(lpwd);
 				break;
 			case MKDIR:
+				if(cmd->npaths)
+					command_mkdir(chp, data, sfd_client, *cmd->paths);
+				else
+					fprintf(stderr, "No path to directory given.\n");
 				break;
 			case LMKDIR:
 				if(cmd->npaths)

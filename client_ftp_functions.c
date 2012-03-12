@@ -353,18 +353,10 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }
 
-void command_rget(struct packet* chp, struct packet* data, int sfd_client)
+static void __command_rget__(struct packet* chp, struct packet* data, int sfd_client)
 {
-	char filename[LENBUFFER];
+	static char filename[LENBUFFER];
 	int x;
-	set0(chp);
-	chp->type = REQU;
-	chp->conid = -1;
-	chp->comid = RGET;
-	data = htonp(chp);
-	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-		er("send()", x);
-	
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
@@ -388,6 +380,20 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 		printf("\tTransmission successfully ended.\n");
 	else
 		fprintf(stderr, "There was a problem completing the request.\n");
+}
+
+void command_rget(struct packet* chp, struct packet* data, int sfd_client)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = RGET;
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	
+	__command_rget__(chp, data, sfd_client);
 }
 
 void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)

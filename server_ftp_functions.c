@@ -135,16 +135,29 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->type = REQU;
 			shp->comid = LMKDIR;
 			strcpy(shp->buffer, e->d_name);
+			data = htonp(shp);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			
-			command_cd(chp, data, sfd_client, e->d_name);
-			command_lcd(e->d_name);
+			shp->type = REQU;
+			shp->comid = LCD;
+			strcpy(shp->buffer, e->d_name);
+			data = htonp(shp);
+			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+				er("send()", x);
+			if((x = chdir(e->d_name)) == -1)
+				er("chdir()", x);
+
+			command_rget(shp, data, sfd_client);
 			
-			command_rput(chp, data, sfd_client);
-			
-			command_cd(chp, data, sfd_client, "..");
-			command_lcd("..");
+			shp->type = REQU;
+			shp->comid = LCD;
+			strcpy(shp->buffer, "..");
+			data = htonp(shp);
+			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+				er("send()", x);
+			if((x = chdir("..")) == -1)
+				er("chdir()", x);
 		}
 	closedir(d);
 }

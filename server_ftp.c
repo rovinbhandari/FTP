@@ -88,9 +88,7 @@ void* serve_client(void* info)
 					command_cd(shp, data, sfd_client, x == -1 ? "fail" : "success");
 					break;
 				case MKDIR:
-					if((x = mkdir(shp->buffer, 0777)) == -1)
-						fprintf(stderr, "Wrong path.\n");
-					command_mkdir(shp, data, sfd_client, x == -1 ? "fail" : "success");
+					command_mkdir(shp, data, sfd_client);
 					break;
 				case LS:
 					if(!getcwd(lpwd, sizeof lpwd))

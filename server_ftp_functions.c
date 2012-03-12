@@ -86,8 +86,22 @@ void command_put(struct packet* shp, struct packet* data, int sfd_client)
 	}
 }
 
-void command_mkdir(struct packet* shp, struct packet* data, int sfd_client, char* message)
+void command_mkdir(struct packet* shp, struct packet* data, int sfd_client)
 {
+	char message[LENBUFFER];
+	DIR* d = opendir(shp->buffer);
+	if(d)
+	{	
+		strcpy(message, "already exists");
+		closedir(d);
+	}
+	else if(mkdir(shp->buffer, 0777) == -1)
+	{
+		fprintf(stderr, "Wrong path.\n");
+		strcpy(message, "fail");
+	}
+	else
+		strcpy(message, "success");
 	int x;
 	shp->type = INFO;
 	strcpy(shp->buffer, message);

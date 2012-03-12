@@ -29,4 +29,6 @@ void command_mgetwild(struct packet*, struct packet*, int);
 void command_mputwild(struct packet*, struct packet*, int, char*);
 void command_rput(struct packet*, struct packet*, int);
 void command_mkdir(struct packet*, struct packet*, int, char*);
+void command_lmkdir(char*);
+void command_lcd(char*);
 

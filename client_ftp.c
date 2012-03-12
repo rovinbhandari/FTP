@@ -83,8 +83,10 @@ int main(int argc, char* argv[])
 					fprintf(stderr, "No path given.\n");
 				break;
 			case LCD:
-				if((x = chdir(*cmd->paths)) == -1)
-					fprintf(stderr, "Wrong path.\n");
+				if(cmd->npaths)
+					command_lcd(*cmd->paths);
+				else
+					fprintf(stderr, "No path given.\n");
 				break;
 			case PWD:
 				command_pwd(chp, data, sfd_client);
@@ -112,10 +114,7 @@ int main(int argc, char* argv[])
 				break;
 			case LMKDIR:
 				if(cmd->npaths)
-				{
-					if((x = mkdir(*cmd->paths, 0777)) == -1)
-						fprintf(stderr, "Error in creating directory.\n");
-				}
+					command_lmkdir(*cmd->paths);
 				else
 					fprintf(stderr, "No path to directory given.\n");
 				break;

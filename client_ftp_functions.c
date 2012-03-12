@@ -339,13 +339,15 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 			append_path(cmd, e->d_name);
 		else if(e->d_type == 4 && strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
 		{
-			// send packet for making directory on the server side.
-		
-			if((x = chdir(e->d_name)) == -1)
-				er("chdir()", x);
+			command_mkdir(chp, data, sfd_client, e->d_name);
+			
+			command_cd(chp, data, sfd_client, e->d_name);
+			command_lcd(e->d_name);
+			
 			command_rput(chp, data, sfd_client);
-			if((x = chdir("..")) == -1)
-				er("chdir()", x);
+			
+			command_cd(chp, data, sfd_client, "..");
+			command_lcd("..");
 		}
 	closedir(d);
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
@@ -365,9 +367,34 @@ void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
-	if(chp->type == INFO && chp->comid == MKDIR && !strcmp(chp->buffer, "success"))
-		;
+	if(chp->type == INFO && chp->comid == MKDIR)
+	{
+		if(!strcmp(chp->buffer, "success"))
+			printf("\tCreated directory on server.\n");
+		else if(!strcmp(chp->buffer, "already exists"))
+			printf("\tDirectory already exitst on server.\n");
+	}
 	else
 		fprintf(stderr, "\tError executing command on the server.\n");
+}
+
+void command_lmkdir(char* dirname)
+{
+	DIR* d = opendir(dirname);
+	if(d)
+	{
+		printf("\tDirectory already exists.\n");
+		closedir(d);
+	}
+	else if(mkdir(dirname, 0777) == -1)
+		fprintf(stderr, "Error in creating directory.\n");
+	else
+		printf("\tCreated directory.\n");
+}
+
+void command_lcd(char* path)
+{
+	if(chdir(path) == -1)
+		fprintf(stderr, "Wrong path.\n");
 }
 

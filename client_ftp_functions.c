@@ -213,7 +213,7 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 		fclose(f);
 	}
 	else
-		fprintf(stderr, "Error getting remote file.\n");
+		fprintf(stderr, "Error getting remote file : <%s>\n", filename);
 }
 
 void command_put(struct packet* chp, struct packet* data, int sfd_client, char* filename)
@@ -428,6 +428,6 @@ void command_lmkdir(char* dirname)
 void command_lcd(char* path)
 {
 	if(chdir(path) == -1)
-		fprintf(stderr, "Wrong path.\n");
+		fprintf(stderr, "Wrong path : <%s>\n", path);
 }
 

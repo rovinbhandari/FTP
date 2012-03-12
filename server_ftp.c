@@ -105,6 +105,7 @@ void* serve_client(void* info)
 					if(!getcwd(lpwd, sizeof lpwd))
 						er("getcwd()", 0);
 					command_rget(shp, data, sfd_client);
+					send_EOT(shp, data, sfd_client);
 					if((x = chdir(lpwd)) == -1)
 						fprintf(stderr, "Wrong path.\n");
 				default:

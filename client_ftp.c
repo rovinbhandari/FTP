@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 		cmd = userinputtocommand(userinput);
 		if(!cmd)
 			continue;
-		printcommand(cmd);
+		//printcommand(cmd);
 		switch(cmd->id)
 		{
 			case GET:

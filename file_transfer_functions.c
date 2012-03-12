@@ -37,6 +37,7 @@ void send_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 	}
 	fprintf(stderr, "\t%d byte(s) read.\n", i);
 	fprintf(stderr, "\t%d data packet(s) sent.\n", j);
+	fflush(stderr);
 }
 
 void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
@@ -66,5 +67,6 @@ void receive_file(struct packet* hp, struct packet* data, int sfd, FILE* f)
 		fprintf(stderr, "Error occured while downloading remote file.\n");
 		exit(2);
 	}
+	fflush(stderr);
 }
 

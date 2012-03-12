@@ -355,6 +355,7 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 
 void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 {
+	char filename[LENBUFFER];
 	int x;
 	set0(chp);
 	chp->type = REQU;
@@ -374,7 +375,10 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 		else if(chp->comid == LCD)
 			command_lcd(chp->buffer);
 		else if(chp->comid == GET)
-			command_get(chp, data, sfd_client, chp->buffer);
+		{
+			strcpy(filename, chp->buffer);
+			command_get(chp, data, sfd_client, filename);
+		}
 
 		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 			er("recv()", x);

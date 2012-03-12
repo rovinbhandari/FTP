@@ -359,15 +359,27 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 	set0(chp);
 	chp->type = REQU;
 	chp->conid = -1;
-	chp->comid = GET;
-	strcpy(chp->buffer, filename);
+	chp->comid = RGET;
 	data = htonp(chp);
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);
+	
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
+	while(chp->type != EOT)
+	{
+		if(chp->type == LMKDIR)
+			command_lmkdir(chp->buffer);
+		else if(chp->type == LCD)
+			command_lcd(chp->buffer);
+		else if(chp->type == GET)
+			command_get(chp, data, sfd_client, chp->buffer);
 
+		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+			er("recv()", x);
+		chp = ntohp(data);
+	}
 }
 
 void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)

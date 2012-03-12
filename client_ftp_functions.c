@@ -205,7 +205,7 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
-	//printpacket(chp, HP);
+	printpacket(chp, HP);
 	if(chp->type == INFO && chp->comid == GET && strlen(chp->buffer))
 	{
 		printf("\t%s\n", chp->buffer);
@@ -353,37 +353,9 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }
 
-static void __command_rget__(struct packet* chp, struct packet* data, int sfd_client)
-{
-	static char filename[LENBUFFER];
-	int x;
-	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
-		er("recv()", x);
-	chp = ntohp(data);
-	while(chp->type == REQU)
-	{
-		if(chp->comid == LMKDIR)
-			command_lmkdir(chp->buffer);
-		else if(chp->comid == LCD)
-			command_lcd(chp->buffer);
-		else if(chp->comid == GET)
-		{
-			strcpy(filename, chp->buffer);
-			command_get(chp, data, sfd_client, filename);
-		}
-
-		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
-			er("recv()", x);
-		chp = ntohp(data);
-	}
-	if(chp->type == EOT)
-		printf("\tTransmission successfully ended.\n");
-	else
-		fprintf(stderr, "There was a problem completing the request.\n");
-}
-
 void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 {
+	char temp[LENBUFFER];
 	int x;
 	set0(chp);
 	chp->type = REQU;
@@ -393,7 +365,37 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 		er("send()", x);
 	
-	__command_rget__(chp, data, sfd_client);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+	printpacket(chp, HP);
+	while(chp->type == REQU)
+	{
+		if(chp->comid == LMKDIR)
+		{
+			strcpy(temp, chp->buffer);
+			command_lmkdir(temp);
+		}
+		else if(chp->comid == LCD)
+		{
+			strcpy(temp, chp->buffer);
+			command_lcd(temp);
+		}
+		else if(chp->comid == GET)
+		{
+			strcpy(temp, chp->buffer);
+			command_get(chp, data, sfd_client, temp);
+		}
+
+		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+			er("recv()", x);
+		chp = ntohp(data);
+		printpacket(chp, HP);
+	}
+	if(chp->type == EOT)
+		printf("\tTransmission successfully ended.\n");
+	else
+		fprintf(stderr, "There was a problem completing the request.\n");
 }
 
 void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)

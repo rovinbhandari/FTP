@@ -49,7 +49,7 @@ void printpacket(struct packet* p, int ptype)
 	printf("\t\ttype = %d\n", p->type);
 	printf("\t\tcomid = %d\n", p->comid);
 	printf("\t\tdatalen = %d\n", p->datalen);
-	printf("\t\tbuffer = %s\n\n", p->buffer);
+	printf("\t\tbuffer = %s\n", p->buffer);
 	
 	fflush(stdout);
 }

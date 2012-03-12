@@ -121,21 +121,14 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 		er("opendir()", (int) d);
 	struct dirent* e;
 	while(e = readdir(d))
-		if(e->d_type == 8)
-		{
-			shp->type = REQU;
-			shp->comid = GET;
-			strcpy(shp->buffer, e->d_name);
-			data = htonp(shp);
-			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
-				er("send()", x);
-		}
-		else if(e->d_type == 4 && strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
+		if(e->d_type == 4 && strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
 		{
 			shp->type = REQU;
 			shp->comid = LMKDIR;
 			strcpy(shp->buffer, e->d_name);
 			data = htonp(shp);
+			fprintf(stderr, "LMKDIR: e->d_name = <%s>\n", e->d_name);
+			printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			
@@ -143,6 +136,8 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = LCD;
 			strcpy(shp->buffer, e->d_name);
 			data = htonp(shp);
+			fprintf(stderr, "LCD: e->d_name = <%s>\n", e->d_name);
+			printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			if((x = chdir(e->d_name)) == -1)
@@ -154,10 +149,28 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = LCD;
 			strcpy(shp->buffer, "..");
 			data = htonp(shp);
+			fprintf(stderr, "LCD: <..>\n");
+			printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			if((x = chdir("..")) == -1)
 				er("chdir()", x);
+		}
+		else if(e->d_type == 8)
+		{
+			shp->type = REQU;
+			shp->comid = GET;
+			strcpy(shp->buffer, e->d_name);
+			data = htonp(shp);
+			fprintf(stderr, "GET: e->d_name = <%s>\n", e->d_name);
+			printpacket(shp, HP);
+			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+				er("send()", x);
+			if((x = recv(sfd_client, data, size_packet, 0)) == 0)
+				er("recv()", x);
+			shp = ntohp(data);
+			if(shp->type == REQU && shp->comid == GET)
+				command_get(shp, data, sfd_client);
 		}
 	closedir(d);
 }

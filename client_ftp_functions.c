@@ -205,7 +205,7 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
-	printpacket(chp, HP);
+	//printpacket(chp, HP);
 	if(chp->type == INFO && chp->comid == GET && strlen(chp->buffer))
 	{
 		printf("\t%s\n", chp->buffer);
@@ -368,7 +368,7 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
-	printpacket(chp, HP);
+	//printpacket(chp, HP);
 	while(chp->type == REQU)
 	{
 		if(chp->comid == LMKDIR)
@@ -390,7 +390,7 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 			er("recv()", x);
 		chp = ntohp(data);
-		printpacket(chp, HP);
+		//printpacket(chp, HP);
 	}
 	if(chp->type == EOT)
 		printf("\tTransmission successfully ended.\n");

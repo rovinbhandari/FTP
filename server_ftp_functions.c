@@ -127,8 +127,8 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = LMKDIR;
 			strcpy(shp->buffer, e->d_name);
 			data = htonp(shp);
-			fprintf(stderr, "LMKDIR: e->d_name = <%s>\n", e->d_name);
-			printpacket(shp, HP);
+			//fprintf(stderr, "LMKDIR: e->d_name = <%s>\n", e->d_name);
+			//printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			
@@ -136,8 +136,8 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = LCD;
 			strcpy(shp->buffer, e->d_name);
 			data = htonp(shp);
-			fprintf(stderr, "LCD: e->d_name = <%s>\n", e->d_name);
-			printpacket(shp, HP);
+			//fprintf(stderr, "LCD: e->d_name = <%s>\n", e->d_name);
+			//printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			if((x = chdir(e->d_name)) == -1)
@@ -149,8 +149,8 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = LCD;
 			strcpy(shp->buffer, "..");
 			data = htonp(shp);
-			fprintf(stderr, "LCD: <..>\n");
-			printpacket(shp, HP);
+			//fprintf(stderr, "LCD: <..>\n");
+			//printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			if((x = chdir("..")) == -1)
@@ -162,8 +162,8 @@ void command_rget(struct packet* shp, struct packet* data, int sfd_client)
 			shp->comid = GET;
 			strcpy(shp->buffer, e->d_name);
 			data = htonp(shp);
-			fprintf(stderr, "GET: e->d_name = <%s>\n", e->d_name);
-			printpacket(shp, HP);
+			//fprintf(stderr, "GET: e->d_name = <%s>\n", e->d_name);
+			//printpacket(shp, HP);
 			if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
 				er("send()", x);
 			if((x = recv(sfd_client, data, size_packet, 0)) == 0)

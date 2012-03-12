@@ -84,6 +84,8 @@
 #define	DEBUG		1
 
 #define	PORTSERVER	8487
+#define CONTROLPORT	PORTSERVER
+#define DATAPORT	(PORTSERVER + 1)
 
 enum TYPE
 	{

@@ -29,4 +29,5 @@ void command_ls(struct packet*, struct packet*, int, char*);
 void command_get(struct packet*, struct packet*, int);
 void command_put(struct packet*, struct packet*, int);
 void command_mkdir(struct packet*, struct packet*, int);
+void command_rget(struct packet*, struct packet*, int);
 

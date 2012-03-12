@@ -110,3 +110,36 @@ void command_mkdir(struct packet* shp, struct packet* data, int sfd_client)
 		er("send()", x);
 }
 
+void command_rget(struct packet* chp, struct packet* data, int sfd_client)
+{
+	static char lpwd[LENBUFFER];
+	if(!getcwd(lpwd, sizeof lpwd))
+		er("getcwd()", 0);
+	int x;
+	DIR* d = opendir(lpwd);
+	if(!d)
+		er("opendir()", (int) d);
+	struct dirent* e;
+	struct command* cmd = (struct command*) malloc(sizeof(struct command));
+	cmd->id = RPUT;
+	cmd->npaths = 0;
+	cmd->paths = NULL;
+	while(e = readdir(d))
+		if(e->d_type == 8)
+			append_path(cmd, e->d_name);
+		else if(e->d_type == 4 && strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
+		{
+			command_mkdir(chp, data, sfd_client, e->d_name);
+			
+			command_cd(chp, data, sfd_client, e->d_name);
+			command_lcd(e->d_name);
+			
+			command_rput(chp, data, sfd_client);
+			
+			command_cd(chp, data, sfd_client, "..");
+			command_lcd("..");
+		}
+	closedir(d);
+	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
+}
+

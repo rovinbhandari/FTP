@@ -119,7 +119,11 @@ int main(int argc, char* argv[])
 					fprintf(stderr, "No path to directory given.\n");
 				break;
 			case RGET:
-				// for later
+				if(!getcwd(lpwd, sizeof lpwd))
+					er("getcwd()", 0);
+				command_rget(chp, data, sfd_client);
+				if((x = chdir(lpwd)) == -1)
+					fprintf(stderr, "Wrong path.\n");
 				break;
 			case RPUT:
 				if(!getcwd(lpwd, sizeof lpwd))

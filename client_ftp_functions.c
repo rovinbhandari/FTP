@@ -353,6 +353,23 @@ void command_rput(struct packet* chp, struct packet* data, int sfd_client)
 	command_mput(chp, data, sfd_client, cmd->npaths, cmd->paths);
 }
 
+void command_rget(struct packet* chp, struct packet* data, int sfd_client)
+{
+	int x;
+	set0(chp);
+	chp->type = REQU;
+	chp->conid = -1;
+	chp->comid = GET;
+	strcpy(chp->buffer, filename);
+	data = htonp(chp);
+	if((x = send(sfd_client, data, size_packet, 0)) != size_packet)
+		er("send()", x);
+	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
+		er("recv()", x);
+	chp = ntohp(data);
+
+}
+
 void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)
 {
 	int x;

@@ -367,19 +367,23 @@ void command_rget(struct packet* chp, struct packet* data, int sfd_client)
 	if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 		er("recv()", x);
 	chp = ntohp(data);
-	while(chp->type != EOT)
+	while(chp->type == REQU)
 	{
-		if(chp->type == LMKDIR)
+		if(chp->comid == LMKDIR)
 			command_lmkdir(chp->buffer);
-		else if(chp->type == LCD)
+		else if(chp->comid == LCD)
 			command_lcd(chp->buffer);
-		else if(chp->type == GET)
+		else if(chp->comid == GET)
 			command_get(chp, data, sfd_client, chp->buffer);
 
 		if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
 			er("recv()", x);
 		chp = ntohp(data);
 	}
+	if(chp->type == EOT)
+		printf("\tTransmission successfully ended.\n");
+	else
+		fprintf(stderr, "There was a problem completing the request.\n");
 }
 
 void command_mkdir(struct packet* chp, struct packet* data, int sfd_client, char* dirname)

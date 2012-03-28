@@ -1,7 +1,7 @@
 remove set0(chp) and chp->conid = -1 from the functions in client_udp_functions.c so that the conid is maintained.
 implement different connections for control and for data.
 implement command queueing on client/server.
-implement multi-threading on server side.
+NOT IMPORTANT: implement multi-threading on server side.
 put the server on port 21.
 DONE: make the client capable of parsing spaces in filenames.
 remove struct packet* data from the argument of all the functions as it is not necessary.
